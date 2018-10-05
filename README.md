@@ -41,7 +41,7 @@ secure-key-40F2C56A-9B7A-425E-AE25-8959E38E73BE
 
 회원 정보 및 게시판의 게시물을 선택하여 데이터 이전을 할 수 있습니다.
 
-![](https://raw.githubusercontent.com/xpressengine/xpressengine-migration/master/assets/step2.png)
+![](https://github.com/xpressengine/xpressengine-migration/blob/master/assets/step02.png?raw=true)
 
 #### 회원
 그룹, 확장필드, 이메일, 이메일 인증 여부, ID, 닉네임, 패스워드, 프로필 이미지 등의 개인정보를 추출합니다.

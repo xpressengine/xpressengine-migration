@@ -37,8 +37,6 @@ $document_result = $oMigration->query($query);
 // 헤더 정보를 출력
 $oMigration->printHeader();
 
-
-
 if(_X_OFFSET === 0) {
 	if($db_info->db_type == 'cubrid') {
 		$localeQuery = sprintf('select "default_language" from "%s_sites" where "site_srl" = 0', $db_info->db_table_prefix);
@@ -102,7 +100,7 @@ if(_X_OFFSET === 0) {
 	$oMigration->closeNode('config');
 
 	// 모듈
-	if(!!cubrid_num_rows($moduleResult)) {
+	if($moduleResult->num_rows) {
 		$oMigration->openNode('modules');
 		while($module = $oMigration->fetch($moduleResult)) {
 			$oMigration->openNode('module');
@@ -119,7 +117,7 @@ if(_X_OFFSET === 0) {
 
 	// 확장변수
 	$document_fileds = array();
-	if(!!cubrid_num_rows($moduleFieldResult)) {
+	if($moduleFieldResult->num_rows) {
 		$oMigration->openNode('document_fields');
 		$filedTypes = array(
             'text' => 'Text',
@@ -172,7 +170,7 @@ if(_X_OFFSET === 0) {
 		$oMigration->closeNode('document_fields');
 	}
 
-	if(!!cubrid_num_rows($categoryResult)) {
+	if($categoryResult->num_rows) {
 		$oMigration->openNode('document_categories');
 		while($category = $oMigration->fetch($categoryResult)) {
 			$title = array();
@@ -208,7 +206,7 @@ if(_X_OFFSET === 0) {
 	}
 }
 
-$oMigration->openNode('documents', array('count' => cubrid_num_rows($document_resultc), 'offset' => _X_OFFSET, 'length' => _X_LIMIT));
+$oMigration->openNode('documents', array('count' => $document_resultc->num_rows, 'offset' => _X_OFFSET, 'length' => _X_LIMIT));
 
 while($document_info = $oMigration->fetch($document_result)) {
 	$obj = null;

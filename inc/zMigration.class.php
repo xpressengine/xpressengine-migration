@@ -464,7 +464,7 @@ class zMigration
 				// $multi_content[$lang_info->lang_code] = $lang_info->value;
 			}
 		}
-		cubrid_free_result($multilingual_result);
+		mysql_free_result($multilingual_result);
 
 		$this->printNode('created_at', date(DATE_ISO8601, strtotime($obj->regdate)));
 		$this->printNode('updated_at', date(DATE_ISO8601, strtotime($obj->last_update)));
@@ -581,7 +581,7 @@ class zMigration
 		}
 		$count_result = $this->query($queryCount);
 		$countAttaches = $this->fetch($count_result);
-		cubrid_free_result($count_result);
+		mysql_free_result($count_result);
 
 		// 첨부파일
 		$files = array();
@@ -710,7 +710,7 @@ class zMigration
 				}, $content);
 			}
 			$this->closeNode('attaches');
-			cubrid_free_result($file_result);
+			mysql_free_result($file_result);
 		}
 		$this->printNode('content', $content, array('format' => 'html'));
 
@@ -736,7 +736,7 @@ class zMigration
 			}
 			$vars_result = $this->query($vars_query);
 
-			if(cubrid_num_rows($vars_result)) {
+			if($vars_result->num_rows) {
 				$this->openNode('fields');
 				while($var = $this->fetch($vars_result)) {
 					$this->openNode('field');
@@ -745,7 +745,7 @@ class zMigration
 					$this->printNode('value', $var->value, array('xml:lang' => $var->lang_code));
 					$this->closeNode('field');
 				}
-				cubrid_free_result($vars_result);
+				mysql_free_result($vars_result);
 				$this->closeNode('fields');
 			}
 
@@ -785,7 +785,7 @@ class zMigration
 		// 신고
 		$claimResult = $this->query($claimQuery);
 
-		if(cubrid_num_rows($votedResult) || cubrid_num_rows($scrapResult) || cubrid_num_rows($claimResult)) {
+		if($votedResult->num_rows || $scrapResult->num_rows || $claimResult->num_rows) {
 			$this->openNode('logs');
 			while($log = $this->fetch($votedResult)) {
 				if($this->db_info->db_type == 'cubrid') {
@@ -794,8 +794,8 @@ class zMigration
 					$voteEistsUserQuery = sprintf("select member_srl from %s_member where member_srl = %d order by regdate", $this->db_info->db_table_prefix, $log->member_srl);
 				}
 				$voteEistsUserResult = $this->query($voteEistsUserQuery);
-				if(!cubrid_num_rows($voteEistsUserResult)) {
-					cubrid_free_result($voteEistsUserResult);
+				if(!$voteEistsUserResult->num_rows) {
+					mysql_free_result($voteEistsUserResult);
 					continue;
 				}
 
@@ -811,7 +811,7 @@ class zMigration
 
 				$this->closeNode('log');
 			}
-			cubrid_free_result($votedResult);
+			mysql_free_result($votedResult);
 
 			while($log = $this->fetch($scrapResult)) {
 				if($this->db_info->db_type == 'cubrid') {
@@ -820,8 +820,8 @@ class zMigration
 					$scrapExistsUserQuery = sprintf("select count(*) as count_user from %s_member where member_srl = %d order by regdate", $this->db_info->db_table_prefix, $log->member_srl);
 				}
 				$scrapExistsUserResult = $this->query($scrapExistsUserQuery);
-				if(!cubrid_num_rows($scrapExistsUserResult)) {
-					cubrid_free_result($scrapExistsUserResult);
+				if(!$scrapExistsUserResult->num_rows) {
+					mysql_free_result($scrapExistsUserResult);
 					continue;
 				}
 
@@ -844,8 +844,8 @@ class zMigration
 					$claimExistsUserQuery = sprintf("select count(*) as count_user from %s_member where member_srl = %d order by regdate", $this->db_info->db_table_prefix, $log->member_srl);
 				}
 				$claimExistsUserResult = $this->query($claimExistsUserQuery);
-				if(!cubrid_num_rows($claimExistsUserResult)) {
-					cubrid_free_result($claimExistsUserResult);
+				if(!$claimExistsUserResult->num_rows) {
+					mysql_free_result($claimExistsUserResult);
 					continue;
 				}
 
@@ -861,9 +861,9 @@ class zMigration
 			$this->closeNode('logs');
 		} else {
 		}
-			cubrid_free_result($claimResult);
-			cubrid_free_result($votedResult);
-			cubrid_free_result($scrapResult);
+			mysql_free_result($claimResult);
+			mysql_free_result($votedResult);
+			mysql_free_result($scrapResult);
 
 		$this->closeNode('document');
 	}

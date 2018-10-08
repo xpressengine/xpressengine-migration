@@ -110,7 +110,7 @@ if($step > 2):
                 urlencode($filename),
                 urlencode($type),
                 urlencode($module_id),
-                $page
+                $page+1
             );
         ?>
             <li>

@@ -878,8 +878,8 @@ class zMigration
 
 	public function getCurlConfigUrl($args = array())
 	{
-		$real_path = 'http://'.$_SERVER['HTTP_HOST'].preg_replace('/\/index.php$/i','', $_SERVER['SCRIPT_NAME']);
-
+		$path_info = pathinfo($_SERVER['SCRIPT_NAME']);
+		$real_path = 'http://'.$_SERVER['HTTP_HOST'] . $path_info['dirname'];
 		$data = array(
 			'securekey' => $this->securekey,
 			'type' => urlencode($this->type),
@@ -903,7 +903,8 @@ class zMigration
 		$limit = _X_LIMIT;
 		$count = $this->item_count;
 		$max_page = ceil($count / $limit);
-		$real_path = 'http://'.$_SERVER['HTTP_HOST'].preg_replace('/\/index.php$/i','', $_SERVER['SCRIPT_NAME']);
+		$path_info = pathinfo($_SERVER['SCRIPT_NAME']);
+		$real_path = 'http://'.$_SERVER['HTTP_HOST'] . $path_info['dirname'];
 
 		$urlList = array();
 

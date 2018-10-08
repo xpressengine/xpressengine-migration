@@ -183,7 +183,7 @@ class zMigration
 			case 'mysqli' :
 			case 'mysqli_innodb' :
 					$this->connect =  mysqli_connect($this->db_info->db_hostname, $this->db_info->db_userid, $this->db_info->db_password,$this->db_info->db_database,$this->db_info->db_port);
-					if(mysql_error()) return mysqli_error();
+					if(mysqli_error()) return mysqli_error();
 					if($this->source_charset == 'UTF-8') mysqli_query($this->connect, "set names 'utf8'");
 				break;
 			case 'cubrid' :

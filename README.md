@@ -50,7 +50,7 @@ secure-key-40F2C56A-9B7A-425E-AE25-8959E38E73BE
 게시판의 카테고리와 확장필드 설정과, 첨부파일을 포함하는 게시물 데이터를 추출합니다.
 
 ### 3 데이터 가져오기
-데이터를 가져오려는 XE3 사이트에 [Importer 플러그인](https://github.com/xpressengine/xpressengine-migration)을 설치한 후 활성화 후 다음과 같은 단계를 거칩니다.
+데이터를 가져오려는 XE3 사이트에 [Importer 플러그인](https://github.com/xpressengine/xe3_migrator)을 설치한 후 활성화 후 다음과 같은 단계를 거칩니다.
 
 `CURL config` 링크의 주소를 복사하여 아래와 같이 command line에서 사용할 수 있습니다.
 

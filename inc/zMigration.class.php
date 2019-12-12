@@ -1,6 +1,14 @@
 <?php
 if(!defined('__XE_MIGRATOR__')) die('잘못된 접근');
 
+function tool_query_free_result($resource) {
+	if (function_exists('mysql_free_result')) {
+	   return mysql_free_result($resource);
+	}
+
+	return mysqli_free_result($resource);
+}
+
 class zMigration
 {
 	var $securekey;
@@ -40,7 +48,7 @@ class zMigration
 
 	/**
 	 * config 반환 및 저장
-	 * 
+	 *
 	 * @param Array|null $writeConfig Array로 값을 지정한 경우 설정을 저장
 	 * @return Array|false
 	 */
@@ -83,7 +91,7 @@ class zMigration
 
 	/**
 	 * 소스 경로 지정
-	 * 
+	 *
 	 * @param String $path 대상 소스의 경로
 	 * @return void
 	 */
@@ -382,7 +390,7 @@ class zMigration
 
 	public function printUserItem($id, $data)
 	{
-		
+
 	}
 
 	function checkAlgorithm($hash)
@@ -464,7 +472,7 @@ class zMigration
 				// $multi_content[$lang_info->lang_code] = $lang_info->value;
 			}
 		}
-		mysql_free_result($multilingual_result);
+		tool_query_free_result($multilingual_result);
 
 		$this->printNode('created_at', date(DATE_ISO8601, strtotime($obj->regdate)));
 		$this->printNode('updated_at', date(DATE_ISO8601, strtotime($obj->last_update)));
@@ -581,7 +589,7 @@ class zMigration
 		}
 		$count_result = $this->query($queryCount);
 		$countAttaches = $this->fetch($count_result);
-		mysql_free_result($count_result);
+		tool_query_free_result($count_result);
 
 		// 첨부파일
 		$files = array();
@@ -710,7 +718,7 @@ class zMigration
 				}, $content);
 			}
 			$this->closeNode('attaches');
-			mysql_free_result($file_result);
+			tool_query_free_result($file_result);
 		}
 		$this->printNode('content', $content, array('format' => 'html'));
 
@@ -745,7 +753,7 @@ class zMigration
 					$this->printNode('value', $var->value, array('xml:lang' => $var->lang_code));
 					$this->closeNode('field');
 				}
-				mysql_free_result($vars_result);
+				tool_query_free_result($vars_result);
 				$this->closeNode('fields');
 			}
 
@@ -795,7 +803,7 @@ class zMigration
 				}
 				$voteEistsUserResult = $this->query($voteEistsUserQuery);
 				if(!$voteEistsUserResult->num_rows) {
-					mysql_free_result($voteEistsUserResult);
+					tool_query_free_result($voteEistsUserResult);
 					continue;
 				}
 
@@ -811,7 +819,7 @@ class zMigration
 
 				$this->closeNode('log');
 			}
-			mysql_free_result($votedResult);
+			tool_query_free_result($votedResult);
 
 			while($log = $this->fetch($scrapResult)) {
 				if($this->db_info->db_type == 'cubrid') {
@@ -821,7 +829,7 @@ class zMigration
 				}
 				$scrapExistsUserResult = $this->query($scrapExistsUserQuery);
 				if(!$scrapExistsUserResult->num_rows) {
-					mysql_free_result($scrapExistsUserResult);
+					tool_query_free_result($scrapExistsUserResult);
 					continue;
 				}
 
@@ -845,7 +853,7 @@ class zMigration
 				}
 				$claimExistsUserResult = $this->query($claimExistsUserQuery);
 				if(!$claimExistsUserResult->num_rows) {
-					mysql_free_result($claimExistsUserResult);
+					tool_query_free_result($claimExistsUserResult);
 					continue;
 				}
 
@@ -861,9 +869,9 @@ class zMigration
 			$this->closeNode('logs');
 		} else {
 		}
-			mysql_free_result($claimResult);
-			mysql_free_result($votedResult);
-			mysql_free_result($scrapResult);
+			tool_query_free_result($claimResult);
+			tool_query_free_result($votedResult);
+			tool_query_free_result($scrapResult);
 
 		$this->closeNode('document');
 	}

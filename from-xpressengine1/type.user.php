@@ -151,6 +151,7 @@ while($member_info = $oMigration->fetch($member_result)) {
     $oMigration->openNode('user');
     $oMigration->printNode('id', 'urn:xe:migrate:user:' . $member_info->member_srl);
     $oMigration->printNode('login', $member_info->email_address);
+    $oMigration->printNode('login_id', $member_info->user_id);
 
     $oMigration->printNode('password', $password_hash, $password_attrs);
 

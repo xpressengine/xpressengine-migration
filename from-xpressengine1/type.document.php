@@ -120,17 +120,17 @@ if(_X_OFFSET === 0) {
 	if($moduleFieldResult->num_rows) {
 		$oMigration->openNode('document_fields');
 		$filedTypes = array(
-            'text' => 'Text',
-            'homepage' => 'Text',
-            'email_address' => 'Text',
-            'tel' => 'Text',
-            'textarea' => 'Text',
-            'radio' => 'Text',
-            'select' => 'Text',
             'checkbox' => 'Text',
-            'kr_zip' => 'Text',
-            'date' => 'Text',
-		);
+            'radio' => 'radio',
+            'select' => 'select',
+            'email_address' => 'fieldType/xpressengine@Email',
+            'kr_zip' => 'fieldType/xpressengine@Address',
+            'homepage' => 'fieldType/xpressengine@Url',
+            'date' => 'fieldType/xpressengine@Text',
+            'tel' => 'fieldType/xpressengine@CellPhoneNumber',
+            'text' => 'fieldType/xpressengine@Text',
+            'textarea' => 'fieldType/xpressengine@Textarea'
+        );
 		while($field = $oMigration->fetch($moduleFieldResult)) {
 			$document_fileds[$field->module_srl . ':' . $field->eid] = $filedTypes[$field->var_type];
 

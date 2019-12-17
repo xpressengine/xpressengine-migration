@@ -87,15 +87,15 @@ if(_X_OFFSET === 0) {
     if($fields) {
         $filedTypes = array(
             'checkbox' => 'Text',
-            'date' => 'Text',
-            'email_address' => 'Text',
-            'homepage' => 'Text',
-            'kr_zip' => 'Text',
-            'radio' => 'Text',
-            'select' => 'Text',
-            'tel' => 'Text',
-            'text' => 'Text',
-            'textarea' => 'Text'
+            'radio' => 'radio',
+            'select' => 'select',
+            'email_address' => 'fieldType/xpressengine@Email',
+            'kr_zip' => 'fieldType/xpressengine@Address',
+            'homepage' => 'fieldType/xpressengine@Url',
+            'date' => 'fieldType/xpressengine@Text',
+            'tel' => 'fieldType/xpressengine@CellPhoneNumber',
+            'text' => 'fieldType/xpressengine@Text',
+            'textarea' => 'fieldType/xpressengine@Textarea'
         );
         $oMigration->openNode('user_fields');
         foreach($fields as $field) {

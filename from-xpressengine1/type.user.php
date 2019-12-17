@@ -86,7 +86,7 @@ if(_X_OFFSET === 0) {
 
     if($fields) {
         $filedTypes = array(
-            'checkbox' => 'Text',
+            'checkbox' => 'fieldType/xpressengine@Text',
             'radio' => 'radio',
             'select' => 'select',
             'email_address' => 'fieldType/xpressengine@Email',

@@ -120,7 +120,7 @@ if(_X_OFFSET === 0) {
 	if($moduleFieldResult->num_rows) {
 		$oMigration->openNode('document_fields');
 		$filedTypes = array(
-            'checkbox' => 'Text',
+            'checkbox' => 'fieldType/xpressengine@Text',
             'radio' => 'radio',
             'select' => 'select',
             'email_address' => 'fieldType/xpressengine@Email',
@@ -132,7 +132,7 @@ if(_X_OFFSET === 0) {
             'textarea' => 'fieldType/xpressengine@Textarea'
         );
 		while($field = $oMigration->fetch($moduleFieldResult)) {
-			$document_fileds[$field->module_srl . ':' . $field->eid] = $filedTypes[$field->var_type];
+            $document_fileds[$field->module_srl . ':' . $field->eid] = $filedTypes[$field->var_type];
 
 			$field_title = array();
 			if(stripos($field->var_name, '$user_lang-') === 0) {
@@ -160,9 +160,17 @@ if(_X_OFFSET === 0) {
 				$oMigration->printNode('title', $field_title[$locale], array('xml:lang' => $locale));
 			}
 			$oMigration->printNode('name', strtolower($field->eid));
-			$oMigration->printNode('type', $filedTypes[$field->var_type]);
+            $oMigration->printNode('type', $filedTypes[$field->var_type]);
+
 			if(!!$field->var_default) {
-				$oMigration->printNode('set', $field->var_default);
+                $value = $field->var_default;
+                $valueAttr = [];
+
+                if (in_array($field->var_type, array('radio', 'select', 'checkbox'))) {
+                    $value = str_replace(',', '|@|', $value);
+                }
+
+				$oMigration->printNode('set', $value);
 			}
 
 			$oMigration->closeNode('document_field');

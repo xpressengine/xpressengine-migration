@@ -32,7 +32,7 @@ if($db_info->db_type == 'cubrid') {
 }
 $resultFiels = $oMigration->query($queryFields);
 while($item = $oMigration->fetch($resultFiels)) {
-    $fields[] = $item;
+    $fields['urn:xe:migrate:user-field:' . $item->member_join_form_srl] = $item;
     $fields_id[$item->column_name] = 'urn:xe:migrate:user-field:' . $item->member_join_form_srl;
 }
 
@@ -100,7 +100,7 @@ if(_X_OFFSET === 0) {
         $oMigration->openNode('user_fields');
         foreach($fields as $field) {
             $set = unserialize($field->default_value);
-            $set = implode(',', $set);
+            $set = implode('|@|', $set);
 
             $oMigration->openNode('user_field');
             $oMigration->printNode('id', 'urn:xe:migrate:user-field:' . $field->member_join_form_srl);
@@ -249,9 +249,29 @@ while($member_info = $oMigration->fetch($member_result)) {
     if($member_info->extra_vars) {
         $oMigration->openNode('fields');
         foreach($fields_id as $name => $id) {
+            $fieldType = $fields[$id]->column_type;
+            $value = $member_info->extra_vars->{$name};
+
+            switch ($fieldType) {
+                case 'kr_zip' :
+                    $addr = [];
+                    $addr[] = $value[0];
+                    $addr[] = $value[1];
+                    $addr[] = $value[3];
+                    $value = implode($addr, '|@|');
+                    break;
+                case 'tel' :
+                    $value = implode($value, '-');
+                    break;
+                default:
+                    if (is_array($value)) {
+                        $value = implode($value, '|@|');
+                    }
+            }
+
             $oMigration->openNode('field');
             $oMigration->printNode('id', $id);
-            $oMigration->printNode('value', $member_info->extra_vars->{$name});
+            $oMigration->printNode('value', $value);
             $oMigration->closeNode('field');
         }
         $oMigration->closeNode('fields');

@@ -222,9 +222,10 @@ while($document_info = $oMigration->fetch($document_result)) {
 	if(!isset($document_info->status)) {
 		$document_info->status = 'PUBLIC';
 	}
-	if($document_info->allow_comment != 'N') {
-		$document_info->allow_comment = true;
-	}
+    if((isset($document_info->allow_comment) && $document_info->allow_comment != 'N')
+        || (isset($document_info->comment_status) && $document_info->comment_status != 'DENY') ) {
+        $document_info->allow_comment = 'Y'; // 'Y', null
+    }
 
 	$oMigration->printDocumentNode($document_info);
 

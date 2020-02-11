@@ -75,7 +75,7 @@ if($step == 2) {
     }
     else
     {
-        $query = "select * from {$db_info->db_table_prefix}_modules where module in ('board')";
+        $query = "select * from {$db_info->db_table_prefix}_modules where module in ('board', 'bodex')";
     }
 
     $module_list_result = $oMigration->query($query);

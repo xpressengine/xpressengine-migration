@@ -103,13 +103,11 @@ if(_X_OFFSET === 0) {
 	if($moduleResult->num_rows) {
 		$oMigration->openNode('modules');
 		while($module = $oMigration->fetch($moduleResult)) {
-            $module->module = str_replace('bodex', 'board', $module->module);
-
 			$oMigration->openNode('module');
 			$oMigration->printNode('id', 'urn:xe:migrate:module:' . $module->module_srl);
 			$oMigration->printNode('title', strip_tags($module->browser_title));
 			$oMigration->printNode('url', $module->mid);
-			$oMigration->printNode('module_type', $module->module);
+			$oMigration->printNode('module_type', str_replace('bodex', 'board', $module->module));
 			$oMigration->printNode('created_at', date(DATE_ISO8601, strtotime($module->regdate)));
 
 			$oMigration->closeNode('module');

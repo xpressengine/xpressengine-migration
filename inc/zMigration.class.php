@@ -915,7 +915,7 @@ class zMigration
 		header("Cache-Control: no-store, no-cache, must-revalidate");
 		header("Cache-Control: post-check=0, pre-check=0", false);
 		header("Pragma: no-cache");
-		header('Content-Disposition: attachment; filename="list.txt"');
+		header('Content-Disposition: attachment; filename="list-'.$_GET['type'].$_GET['module_id'].'.txt"');
 		header("Content-Transfer-Encoding: binary");
 
 		$limit = _X_LIMIT;
@@ -963,6 +963,7 @@ class zMigration
 		header("Pragma: no-cache");
 		header('Content-Disposition: attachment; filename="list.txt"');
 		header("Content-Transfer-Encoding: text");
+
 
 		$limit = _X_LIMIT;
 		$count = $this->item_count;

@@ -126,8 +126,8 @@ if($db_info->db_type == 'cubrid') {
 
 $member_result = $oMigration->query($queryMember);
 
-$oMigration->setItemCount($member_result->num_rows);
-$oMigration->openNode('users', array('count' => $member_result->num_rows->num_rows));
+$oMigration->setItemCount($oMigration->getNum_rows($member_result));
+$oMigration->openNode('users', array('count' => $oMigration->getNum_rows($member_result)));
 
 while($member_info = $oMigration->fetch($member_result)) {
     $member_srl = $member_info->member_srl;
@@ -206,8 +206,16 @@ while($member_info = $oMigration->fetch($member_result)) {
         $point_query = sprintF('select point from %s_point where member_srl = %d', $db_info->db_table_prefix, $member_srl);
     }
     $point_result = $oMigration->query($point_query);
-    $point = (int)$oMigration->fetch($point_result);
-    if($point) $oMigration->printNode('point',  $point, array('accrue' => $point));
+    //$point = (int)$oMigration->fetch($point_result);
+    //if($point) $oMigration->printNode('point',  $point, array('accrue' => $point));
+
+    $point = $oMigration->fetch($point_result);
+    if($point){
+        foreach ( $point as $value )
+        {
+            $oMigration->printNode('point',  $value, array('accrue' => $value));
+        }
+    }
 
     // 이메일
     if($db_info->db_type == 'cubrid') {

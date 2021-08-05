@@ -100,7 +100,7 @@ if(_X_OFFSET === 0) {
 	$oMigration->closeNode('config');
 
 	// 모듈
-	if($moduleResult->num_rows) {
+	if($oMigration->getNum_rows($moduleResult)) {
 		$oMigration->openNode('modules');
 		while($module = $oMigration->fetch($moduleResult)) {
 			$oMigration->openNode('module');
@@ -117,7 +117,7 @@ if(_X_OFFSET === 0) {
 
 	// 확장변수
 	$document_fileds = array();
-	if($moduleFieldResult->num_rows) {
+	if($oMigration->getNum_rows($moduleFieldResult)) {
 		$oMigration->openNode('document_fields');
 		$filedTypes = array(
             'checkbox' => 'fieldType/xpressengine@Text',
@@ -178,7 +178,7 @@ if(_X_OFFSET === 0) {
 		$oMigration->closeNode('document_fields');
 	}
 
-	if($categoryResult->num_rows) {
+	if($oMigration->getNum_rows($categoryResult)) {
 		$oMigration->openNode('document_categories');
 		while($category = $oMigration->fetch($categoryResult)) {
 			$title = array();
@@ -214,7 +214,7 @@ if(_X_OFFSET === 0) {
 	}
 }
 
-$oMigration->openNode('documents', array('count' => $document_resultc->num_rows, 'offset' => _X_OFFSET, 'length' => _X_LIMIT));
+$oMigration->openNode('documents', array('count' => $oMigration->getNum_rows($document_result), 'offset' => _X_OFFSET, 'length' => _X_LIMIT));
 
 while($document_info = $oMigration->fetch($document_result)) {
 	$obj = null;

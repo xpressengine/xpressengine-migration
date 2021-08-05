@@ -529,6 +529,16 @@ class zMigration
 			$display = 'secret';
 		}
 
+        if($obj->status == 'SECRET') {
+            $status = 'private';
+            $display = 'secret';
+        }
+
+        if($obj->status == 'TEMP') {
+            $status = 'private';
+            $display = 'hidden';
+        }
+
 		$this->printNode('status', $status);
 		$this->printNode('approved', $approved);
 		$this->printNode('display', $display);
@@ -744,7 +754,7 @@ class zMigration
 			}
 			$vars_result = $this->query($vars_query);
 
-			if($vars_result->num_rows) {
+			if($this->getNum_rows($vars_result)) {
 				$this->openNode('fields');
 				while($var = $this->fetch($vars_result)) {
 					$this->openNode('field');
@@ -793,7 +803,7 @@ class zMigration
 		// 신고
 		$claimResult = $this->query($claimQuery);
 
-		if($votedResult->num_rows || $scrapResult->num_rows || $claimResult->num_rows) {
+		if($this->getNum_rows($votedResult) || $this->getNum_rows($scrapResult) || $this->getNum_rows($claimResult)) {
 			$this->openNode('logs');
 			while($log = $this->fetch($votedResult)) {
 				if($this->db_info->db_type == 'cubrid') {
@@ -802,7 +812,7 @@ class zMigration
 					$voteEistsUserQuery = sprintf("select member_srl from %s_member where member_srl = %d order by regdate", $this->db_info->db_table_prefix, $log->member_srl);
 				}
 				$voteEistsUserResult = $this->query($voteEistsUserQuery);
-				if(!$voteEistsUserResult->num_rows) {
+				if(!$this->getNum_rows($voteEistsUserResult)) {
 					tool_query_free_result($voteEistsUserResult);
 					continue;
 				}
@@ -828,7 +838,7 @@ class zMigration
 					$scrapExistsUserQuery = sprintf("select count(*) as count_user from %s_member where member_srl = %d order by regdate", $this->db_info->db_table_prefix, $log->member_srl);
 				}
 				$scrapExistsUserResult = $this->query($scrapExistsUserQuery);
-				if(!$scrapExistsUserResult->num_rows) {
+				if(!$this->getNum_rows($scrapExistsUserResult)) {
 					tool_query_free_result($scrapExistsUserResult);
 					continue;
 				}
@@ -852,7 +862,7 @@ class zMigration
 					$claimExistsUserQuery = sprintf("select count(*) as count_user from %s_member where member_srl = %d order by regdate", $this->db_info->db_table_prefix, $log->member_srl);
 				}
 				$claimExistsUserResult = $this->query($claimExistsUserQuery);
-				if(!$claimExistsUserResult->num_rows) {
+				if(!$this->getNum_rows($claimExistsUserResult)) {
 					tool_query_free_result($claimExistsUserResult);
 					continue;
 				}
@@ -1019,4 +1029,26 @@ class zMigration
 		}
 		return false;
 	}
+
+    function getNum_rows($result) {
+        switch($this->db_info->db_type) {
+            case 'mysql' :
+            case 'mysql_innodb' :
+                return mysql_num_rows($result);
+                break;
+            case 'mysqli' :
+            case 'mysqli_innodb' :
+                return $result->num_rows;
+                break;
+            case 'cubrid' :
+                return $result->num_rows;
+                break;
+            case 'sqlite3_pdo' :
+                return $result->num_rows;
+                break;
+            case 'sqlite' :
+                return $result->num_rows;
+                break;
+        }
+    }
 }

@@ -35,11 +35,12 @@ if($step > 1):
                 <?php
                 foreach($module_list as $module_info) {
                     $srl = $module_info->module_srl;
-                    printf('<option value="%s" %s>%s (%s)</option>',
+                    printf('<option value="%s" %s>%s (%s) %s</option>',
                         $srl,
                         ($module_id == $srl) ? ' selected="selected"' : '',
                         $module_info->browser_title,
-                        $module_info->mid
+                        $module_info->mid,
+                        $srl
                         );
                 }
                 ?>
